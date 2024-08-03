@@ -140,6 +140,25 @@ footer a,footer i{
     background-color: var(--color-primary);
 }
 
+#pet_select, #branch_select {
+    height: 66.6px;
+}
+
+#pet_list li {
+    height: 50.6px;
+}
+
+#pet_list li::after {
+    content: '';
+    width: 10px;
+}
+
+/* 正方形 */
+#pet_list img, #pet_select img {
+    max-height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
 /* 新增front2 */
 /* 新增front2 */
 /* 新增front2 */

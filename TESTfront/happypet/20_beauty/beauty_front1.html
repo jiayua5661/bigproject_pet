@@ -75,27 +75,37 @@
                     <h5 class="mb-0">美容預約</h5>
                 </div>
                 <div class="p-4 row">
+
                     <div class="col-lg-6 fs-5 col-12">
-                        <div class="shadow dropdown border p-3 rounded-3">
-                            <div href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="branch_select"
-                                data-bs-toggle="dropdown" aria-expanded="false">選擇分店</div>
-                            <ul class="dropdown-menu" aria-labelledby="branch_select">
+                        <div class=" dropdown">
+                            <div href="" data-toggle="dropdown"
+                                class="dropdown-toggle shadow border p-3 rounded-3 d-flex justify-content-between align-items-center"
+                                role="button" id="branch_select" data-bs-toggle="dropdown" aria-expanded="false">選擇分店
+                            </div>
+                            <ul class="dropdown-menu w-100 fs-5" id="branch_list" aria-labelledby="branch_select">
                                 <li class="dropdown-item">台中店</li>
                                 <li class="dropdown-item">台北店</li>
                                 <li class="dropdown-item">台南店</li>
                             </ul>
                         </div>
-
-
                     </div>
+
                     <div class="col-lg-6 fs-5 col-12 mt-lg-0 mt-3">
-                        <div class="shadow dropdown border p-3 rounded-3">
-                            <div href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="branch_select"
-                                data-bs-toggle="dropdown" aria-expanded="false">我的寵物</div>
-                            <ul class="dropdown-menu" aria-labelledby="branch_select">
-                                <li class="dropdown-item">小白</li>
-                                <li class="dropdown-item">台北店</li>
-                                <li class="dropdown-item">台南店</li>
+                        <div class="dropdown">
+                            <div href="" data-toggle="dropdown"
+                                class="dropdown-toggle shadow border px-3 py-2 rounded-3 d-flex justify-content-between align-items-center"
+                                role="button" id="pet_select" data-bs-toggle="dropdown" aria-expanded="false">我的寵物</div>
+                            <ul class="dropdown-menu w-100 fs-5" id="pet_list" aria-labelledby="pet_select">
+                                <li class="dropdown-item d-flex align-items-center justify-content-between py-1 px-3">
+                                    <img src="../img/20_beauty/petheadshot_none.png" class="rounded-circle" alt="">
+                                    <span>name</span>
+                                    <span>狗 | 小型犬 | 短毛</span>
+                                </li>
+                                <li class="dropdown-item d-flex align-items-center justify-content-between py-1 px-3">
+                                    <img src="../img/20_beauty/petheadshot_none.png" class="rounded-circle" alt="">
+                                    <span>name</span>
+                                    <span>貓 | 小型犬 | 短毛</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -106,11 +116,14 @@
         </div>
 
         <!-- 美容預約方案 -->
-        <div class="container mt-4">
+        <div class="container mt-4" id="beauty_plan_div">
+
+            <!-- 下面生成function要在預約btn 父元素加<a> -->
+            <!-- 美容方案範本 -->
             <div class="mx-5 mt-4">
                 <div class="row border p-4 shadow rounded-4">
                     <div class="col-lg-3 col-md-4 col-12">
-                        <img src="../img/20_beauty/a_1646386899.jpg " alt="" class="img-fluid">
+                        <img src="../img/20_beauty/beauty_plan1.jpg" alt="" class="img-fluid">
                     </div>
                     <div class="col-lg-6 col-md-8 col-12">
                         <div class="my-2"><span class="fs-5">小美容</span></div>
@@ -122,29 +135,15 @@
                     </div>
                     <div class="col-lg-3 col-12 d-flex flex-column justify-content-between color_primary_self">
                         <div class="fw-bolder fs-4 d-flex flex-row-reverse">NT$ 600</div>
-                        <button class="fs-5 bgc_primary_self text-white rounded p-2 border-white">預約時段</button>
+                        <!-- 我在這邊  重要  要加 <a> -->
+                        <!-- <a href="./beauty_front2.html"><button class="fs-5 bgc_primary_self text-white rounded p-2 border-white w-100" onclick="beauty_plan_order()" data-planid='1' data-plan_title="小美容">預約時段</button></a> -->
+                        <div><button class="fs-5 bgc_primary_self text-white rounded p-2 border-white w-100"
+                                onclick="beauty_plan_order()" data-planid='1' data-plan_title="小美容">預約時段</button></div>
                     </div>
                 </div>
             </div>
-            <div class="mx-5 mt-4">
-                <div class="row border p-4 shadow rounded-4">
-                    <div class="col-lg-3 col-md-4 col-12">
-                        <img src="../img/20_beauty/a_1646386899.jpg " alt="" class="img-fluid">
-                    </div>
-                    <div class="col-lg-6 col-md-8 col-12">
-                        <div class="my-2"><span class="fs-5">小美容</span></div>
-                        <div class="text-muted"><span>狗 | 迷你犬（3kg以下）•</span><span>1小時</span></div>
-                        <div class="text-muted">
-                            <p>經典小美容洗澡護理</p>
-                            <p>（含：剪指甲、清耳朵、小修頭型、小修足緣、剃腳底毛、剃肛門毛擠肛門腺）</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-12 d-flex flex-column justify-content-between color_primary_self">
-                        <div class="fw-bolder fs-4 d-flex flex-row-reverse">NT$ 600</div>
-                        <button class="fs-5 bgc_primary_self text-white rounded p-2 border-white">預約時段</button>
-                    </div>
-                </div>
-            </div>
+
+
 
         </div>
 
@@ -194,7 +193,74 @@
     <!--------------- footer end---------------->
 
     <script>
+
+        // 存選擇的方案id到sessionStorage("planid") 標題到 plan_title
+        function beauty_plan_order() {
+            // console.log("11111", event.target.dataset.planid);
+            sessionStorage.setItem("planid", event.target.dataset.planid);
+            sessionStorage.setItem("plan_title", event.target.dataset.plan_title);
+            // console.log("sessionStorage", sessionStorage.getItem("planid"));
+            // console.log("sessionStorage", sessionStorage.getItem("plan_title"));
+
+            // plan_title
+            console.log($(event.target).parent().parent().prev().find('span')[0].innerText);
+
+        }
+
         window.onload = () => {
+
+            // 分店選擇 存 選分店到 branch_select
+            document.getElementById('branch_list').addEventListener('click', function (e) {
+                $(e.target).parent().prev().html(e.target.innerHTML);
+                sessionStorage.setItem("branch_select", e.target.innerHTML);
+                console.log("sessionStorage", sessionStorage.getItem("branch_select"));
+            });
+
+            // 寵物選擇
+            document.getElementById('pet_list').addEventListener('click', function (e) {
+                // 監聽子元素
+                if (e.target.nodeName == "LI") {
+                    console.log(e.target);
+                    $(e.target).parent().prev().html($(e.target).html());
+                }
+                if (e.target.nodeName == "IMG") {
+                    console.log($(e.target).parent());
+                    $(e.target).parent().parent().prev().html($(e.target).parent().html());
+                }
+                if (e.target.nodeName == "SPAN") {
+                    console.log($(e.target).parent());
+                    $(e.target).parent().parent().prev().html($(e.target).parent().html());
+                }
+            });
+
+            // 顯示美容方案
+            function show_beauty_plan(arr) {
+                beauty_plan_div.innerHTML = '';
+                arr.forEach(element => {
+                    // 顯示抓出來的方案資料
+                    // console.log(`${element.plan_title} - ${element.plan_instructions} - ${element.beauty_img}+++<br>`);
+                    beauty_plan_div.innerHTML += `
+                        <div class="mx-5 mt-4">
+                            <div class="row border p-4 shadow rounded-4">
+                                <div class="col-lg-3 col-md-4 col-12">
+                                    <img src="${element.beauty_img}" alt="" class="img-fluid">
+                                </div>
+                                <div class="col-lg-6 col-md-8 col-12">
+                                    <div class="my-2"><span class="fs-5">${element.plan_title}</span></div>
+                                    <div class="text-muted"><span>狗 | 迷你犬（3kg以下）•</span><span>1小時</span></div>
+                                    <div class="text-muted">
+                                        <p>${element.plan_instructions}</p>
+                                        <p>（含：剪指甲、清耳朵、小修頭型、小修足緣、剃腳底毛、剃肛門毛擠肛門腺）</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-12 d-flex flex-column justify-content-between color_primary_self">
+                                    <div class="fw-bolder fs-4 d-flex flex-row-reverse">NT$ 600</div>
+                                    <a href="./beauty_front2.html"><button class="fs-5 bgc_primary_self text-white rounded p-2 border-white w-100" onclick="beauty_plan_order()" data-planid="${element.planid}" data-plan_title="${element.plan_title}">預約時段</button></a>
+                                </div>
+                            </div>
+                        </div>`
+                });
+            }
 
             // get 全部美容方案
             async function get_beauty_plan() {
@@ -204,17 +270,26 @@
                 //         console.log(data);
                 //     })
                 let data = await (await fetch('http://localhost/test/back/front_beauty_plan.php')).json();
-                console.log(data);
+                // show_beauty_plan(data);
             }
+
+            // 拿寵物資料   顯示寵物資料還沒寫
+            async function get_pet_info() {
+                // uid 飼主id
+                let uid = 1;
+                // fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)
+                //     .then(res => res.json())
+                //     .then(data => {
+                //         console.log(data);
+                //     })
+                let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
+                console.log(pet_info);
+            }
+
+
+
+            get_pet_info();
             get_beauty_plan();
-
-
-
-
-
-
-
-
         }
 
 
