@@ -16,93 +16,96 @@ body {
     font-style: normal;
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
 header {
     box-shadow: 0 3px 5px #ddd;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
     background-color: #fff;
-    line-height: 50px;
+    line-height: 20px;
 }
 
-.logo {
+.nav-logo {
     max-height: 80px;
 }
 
-a {
+.nav>li>a {
     text-decoration: none;
-    color: rgb(28, 151, 167);
-    color: #90b9ab;
-    color: #2d6184;
-    color: #f5ca7c;
-    color: #888;
     color: var(--color-primary);
     font-weight: bolder;
     font-size: 1.2rem;
-
-}
-
-p {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-a:hover {
-    color: #1c97a7;
-    font-weight: bold;
-}
-
-h2 {
-    margin: 50px 0;
-    font-weight: bold;
-    color: rgb(28, 151, 167);
-    color: #8897a8;
-    color: var(--color-primary);
-
-}
-
-h4 {
-    margin: 20px;
-}
-
-.nav>li>a {
-    padding: 10px;
+    letter-spacing: 0.1em;
 }
 
 .nav>li>a:hover {
     border-bottom: 2px solid #1c97a7;
     border-bottom: 2px solid var(--color-primary);
+    color: #1c97a7;
+    font-weight: bold;
+    
 }
-
-.nav_icon {
-    position: static;
-    right: 0;
-    top: 0;
-    font-size: 1.2rem;
-
+.member {
+    position: fixed;
+    right: 25px;
+    top: 15px;
+    padding: 20px;
+    display: block;
+    font-size: 18px;
 }
-
 .nav_icon a {
+    font-size: 28px;
+    padding: 5px;
+    color: #90b9ab;
+}
+.nav_icon a:hover {
+    padding: 5px;
+    color: #1c97a7;
+    font-weight: bolder;
+}
+
+
+footer{
+    background-color:  #90b9ab;
+    font-size: 18px;
+    overflow: hidden;
+    position: relative;
+    color: #fff;
+}
+
+footer .logo{
+    max-height: 150px;
+}
+.footer_contact li{
+    list-style: none;
+    padding: 5px 0;
+}
+.footer_icon{
+    padding: 10px;
+    font-size: 1.6rem;
+}
+footer a,footer i{
+    color: #fff;
+}
+.copyright,.copyright a{
+    text-decoration: none;
+    font-size: .8rem;
+}
+.bi-instagram,.bi-line,.bi-facebook{
     padding: 5px;
 }
-
-/* 按鈕顏色 */
-
-
-
-.row {
-    margin: 0;
+.footer_img{
+    align-self: flex-end;
+}
+.footer_stamp{
+    width: 23%;
+    filter: brightness(0.1) invert() ;
+    transform: rotate(-15deg);
+    position: absolute;
+    bottom: -25px;
+    right: -10px;
 }
 
-.container-fluid {
-    padding-right: 0;
-    padding-left: 0;
+@media (max-width: 766px) {
+    .footer_stamp{
+       display: none;
+    }
 }
 
 /* 新增front1 */
@@ -159,16 +162,12 @@ h4 {
 .order_detail {
     /* 捲動到 該元素 畫面釘選 */
     position: sticky;
-    top: 130px;
-}
-
-.addcaldiv th,
-td {
-    width: 45px;
+    top: 170px;
 }
 
 #addcaldiv td {
     cursor: pointer;
+    width: 45px;
 }
 
 #addcaldiv .over_date {
@@ -219,98 +218,4 @@ td {
 
 .beauty_back_table div:nth-child(2) {
     background-color:#f5ca7c;
-}
-
-
-/* footer */
-/* footer */
-/* footer */
-/* footer */
-/* footer */
-
-footer {
-    background-color: #90b9ab;
-    color: #fff;
-
-}
-
-footer {
-    margin-top: 100px;
-    position: relative;
-    background: url(./img/index/資產-40.png) no-repeat left bottom/550px;
-    background-color: var(--color-primary);
-    overflow: hidden;
-    padding: 4rem 0;
-}
-
-.footer_contact {
-    padding: 0 12px;
-}
-
-.footer_contact li {
-    padding: 5px 0;
-}
-
-.footer_nav_icon {
-    padding: 10px;
-    font-size: 1.6rem;
-}
-
-footer a,
-footer i {
-    color: #fff;
-}
-
-
-.copyright,
-.copyright a {
-    font-size: .8rem;
-}
-
-.bi-instagram,
-.bi-line,
-.bi-facebook {
-    border-radius: 100%;
-    padding: 5px;
-}
-
-footer .footer_img {
-    width: 335px;
-    position: absolute;
-    bottom: -30px;
-    right: -30px;
-    filter: brightness(0.1) invert();
-    transform: rotate(-15deg);
-}
-
-footer .logo {
-    max-height: 80%;
-}
-
-@media (max-width: 992px) {
-    .nav_icon {
-        position: fixed;
-        right: 0;
-        top: 0;
-        font-size: 1.3rem;
-    }
-
-    footer {
-        background: url(./img/資產-40.png) no-repeat center bottom/400px;
-        background-color: var(--color-primary);
-
-
-    }
-
-    footer .footer_img {
-        display: none;
-
-    }
-}
-
-@media (max-width: 768px) {
-    footer .img-fluid {
-
-        max-width: 80%;
-    }
 }
