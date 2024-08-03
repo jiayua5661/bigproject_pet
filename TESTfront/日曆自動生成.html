@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./_js/jquery-3.6.0.js"></script>
+</head>
+
+<style>
+    #aaacal {
+        display: none;
+        cursor: pointer;
+    }
+
+    td:hover {
+        border: 1px black solid;
+
+    }
+
+    .div_flex {
+        display: flex;
+    }
+
+    .gomid {
+        display: flex;
+        align-items: center;
+    }
+
+</style>
+
+<script>
+
+    // 選擇日曆日期 出現在輸入框後 日曆消失
+    function selectdate(datevalue) {
+        seldate.value = datevalue;
+        $('#aaacal').css('display', 'none');
+    }
+
+    window.onload = () => {
+
+
+        // 取得日曆最左上第一天
+        let thismonth = new Date();
+        let thisday = new Date();
+        thisday.setDate(1);
+        thisday.setDate(1 - (thisday.getDay()));
+
+
+
+        // 生成日曆
+        for (let k = 0; k < 6; k++) {
+            let newtr = document.createElement(`tr`);
+            calendar.appendChild(newtr);
+
+            for (let i = 0; i < 7; i++) {
+                let newth = document.createElement('td');
+                newth.innerHTML = `<span>${thisday.getDate()}</span>`;
+                // 設置data-date屬性為日期字串
+                newth.dataset.date = `${thisday.getFullYear()}-${thisday.getMonth() + 1}-${thisday.getDate()}`
+                let trarray = document.getElementsByTagName('tr');
+                trarray[k + 1].appendChild(newth);
+                thisday.setDate(thisday.getDate() + 1);
+            };
+            if (thismonth.getMonth() < thisday.getMonth()) {
+                break;
+            }
+        }
+
+        // 生成日曆
+        let creatday = '2024,5,1';
+        let today = new Date();
+        let newday = new Date();
+        newday.setDate(1);
+        newday.setDate(1 - (newday.getDay()));
+        // 日曆大字串 生成 綁click事件
+        let newcalender = "";
+        for (let k = 0; k < 6; k++) {
+            newcalender += '<tbody><tr>';
+            for (let i = 0; i < 7; i++) {
+                let dayofweek;
+                switch (newday.getDay()) {
+                    case 0: dayofweek = '星期日'; break;
+                    case 1: dayofweek = '星期一'; break;
+                    case 2: dayofweek = '星期二'; break;
+                    case 3: dayofweek = '星期三'; break;
+                    case 4: dayofweek = '星期四'; break;
+                    case 5: dayofweek = '星期五'; break;
+                    case 6: dayofweek = '星期六'; break;
+                }
+                if (newday < today) {
+                    newcalender += `<td 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'
+                        style = 'color: gray;'>
+                        ${newday.getDate()}</td>`;
+                } else {
+                    newcalender += `<td 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'
+                        onclick='selectdate("${newday.getMonth() + 1}月${newday.getDate()}日 ${dayofweek}")'>
+                        ${newday.getDate()}</td>`;
+                }
+
+                newday.setDate(newday.getDate() + 1);
+            };
+            newcalender += '</tr></tbody>';
+            if (today.getMonth() < newday.getMonth()) {
+                break;
+            }
+
+        }
+        newcalendertable.innerHTML += newcalender;
+        // 生成日曆
+
+
+        // 選擇日期框框 按下 出現日曆
+        seldate.onclick = function () {
+            $('#aaacal').css('display', 'table');
+        }
+
+        // 取值  ???.dataset.date  OR   $(???).data('date')
+    }
+</script>
+
+<body>
+
+    <div class="div_flex">
+        <div class="gomid">
+            上個月
+        </div>
+        <div>
+            <table>
+                <tbody id="calendar">
+                    <tr><!--星期幾-->
+                        <th>日</th>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="gomid">
+            下個月
+        </div>
+    </div>
+
+
+    <input type="date"><br>
+    <label for="">選擇日期</label><input type="text" id="seldate">
+    <div>
+        <table id="aaacal">
+            <tbody id="newcalendertable">
+                <tr><!--星期幾-->
+                    <th>日</th>
+                    <th>一</th>
+                    <th>二</th>
+                    <th>三</th>
+                    <th>四</th>
+                    <th>五</th>
+                    <th>六</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

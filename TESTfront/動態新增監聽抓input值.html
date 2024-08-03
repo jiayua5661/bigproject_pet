@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    window.onload = () => {
+        newbtn.onclick = function () {
+            const newInput = document.createElement("input");
+            newInput.type = "text";
+            newInput.name = "newInput";
+            ddd.appendChild(newInput);
+
+            const newh1 = document.createElement("h1");
+            ddd.appendChild(newh1);
+        }
+
+        document.querySelector("#ddd").addEventListener("keyup", function(e) {
+            if(e.target.nodeName == 'INPUT') {
+                // console.log(e.target.value);
+                e.target.nextSibling.innerHTML = e.target.value;
+            }
+        })
+        // e.target 使用者觸發對象
+        // addEventListener 監聽的是誰，則 e.currentTarget 就是誰
+
+    }
+</script>
+
+<body>
+    <button id="newbtn">11111</button>
+    <div id="ddd">
+        <input type="text" title="11111"><h1></h1>
+    </div>
+
+</body>
+
+</html>

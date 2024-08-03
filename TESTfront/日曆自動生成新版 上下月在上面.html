@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./happypet/css/bootstrap.min.css">
+    <script src="./_js/jquery-3.6.0.js"></script>
+</head>
+
+<style>
+    #addcal {
+        display: none;
+        cursor: pointer;
+    }
+
+    td:hover {
+        border: 1px black solid;
+
+    }
+
+    .display_flex {
+        display: flex;
+    }
+
+    .justify_content_center {
+        justify-content: center;
+    }
+
+    .align_items_center {
+        align-items: center;
+    }
+</style>
+
+<script>
+
+    // 選擇日曆日期 出現在輸入框後 日曆消失
+    function selectdate(datevalue) {
+        seldate.value = datevalue;
+        $('#addcal').css('display', 'none');
+    }
+
+    // 生成日曆函式
+    function createcalender(x) {
+        // 生成日曆
+        // 靜態變數
+        if (createcalender.creatmonth == 'undefined') {
+            let creatmonth = new Date();
+        }
+        // 按輸入框生成今天這個月
+        if (x == 0) {
+            creatmonth = new Date();
+        } else if (x == -1) { // 上個月
+            creatmonth.setMonth(creatmonth.getMonth() - 1);
+        } else if (x == 1) {  // 下個月
+            creatmonth.setMonth(creatmonth.getMonth() + 1);
+        }
+
+        let today = new Date(); // 今天用來判斷能不能按
+        let newday = new Date(creatmonth); // 跑新增天
+        newday.setDate(1);
+        newday.setDate(1 - (newday.getDay()));
+        // 日曆大字串 生成 綁click事件
+        let newcalender = `
+                <div class="display_flex">
+                    <div class="display_flex align_items_center" onclick="createcalender(-1)">上個月</div>
+                    <p class="display_flex justify_content_center">${creatmonth.getFullYear()} 年 ${creatmonth.getMonth()+1} 月 </p>
+                    <div class="display_flex align_items_center" onclick="createcalender(1)">下個月</div>
+                </div>
+                <div class="display_flex">
+                    <table>
+                        <tbody id="newcalendertable">
+                            <tr>
+                                <th>日</th>
+                                <th>一</th>
+                                <th>二</th>
+                                <th>三</th>
+                                <th>四</th>
+                                <th>五</th>
+                                <th>六</th>
+                            </tr>`;
+        for (let k = 0; k < 6; k++) {
+            newcalender += '<tr>';
+            for (let i = 0; i < 7; i++) {
+                const dayofweek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                if (newday < today) {
+                    if (newday.getFullYear() == today.getFullYear() && newday.getMonth() == today.getMonth() && newday.getDate() == today.getDate()) {
+                        // 今天可以選 因為靜態變數 同天 today秒數比較大 會進來 要例外處理
+                        newcalender += `<td 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'
+                        onclick='selectdate("${newday.getFullYear()}/${newday.getMonth() + 1}/${newday.getDate()} ${dayofweek[newday.getDay()]}")'>
+                        ${newday.getDate()}</td>`;
+                    } else {
+                        // 今天以前不能選
+                        newcalender += `<td 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'
+                        style = 'color: red; cursor: not-allowed;'>
+                        ${newday.getDate()}</td>`;
+                    }
+                } else {
+                    newcalender += `<td 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'
+                        onclick='selectdate("${newday.getFullYear()}/${newday.getMonth() + 1}/${newday.getDate()} ${dayofweek[newday.getDay()]}")'>
+                        ${newday.getDate()}</td>`;
+                }
+                newday.setDate(newday.getDate() + 1);
+            };
+            newcalender += '</tr>';
+            if (creatmonth.getMonth() < newday.getMonth()) {
+                break;
+            }
+        }
+        newcalender += `
+                        </tbody>
+                    </table>
+                </div>`;
+        addcal.innerHTML = newcalender;
+        // 生成日曆
+        console.log(today);
+    }
+
+        // 取值  ???.dataset.date  OR   $(???).data('date')
+
+
+    window.onload = () => {
+
+        // 選擇日期框框 按下 出現日曆
+        seldate.onclick = function () {
+            $('#addcal').css('display', 'table');
+            createcalender(0);
+        }
+
+    }
+</script>
+
+<body>
+
+    <label for="">選擇日期</label><input type="text" id="seldate">
+    <!-- 日曆生成div -->
+    <div id="addcal">
+    </div>
+
+</body>
+
+</html>
