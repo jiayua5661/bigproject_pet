@@ -209,6 +209,7 @@
         }
 
         window.onload = () => {
+            pet_list.innerHTML = '';
 
             // 分店選擇 存 選分店到 branch_select
             document.getElementById('branch_list').addEventListener('click', function (e) {
@@ -243,18 +244,19 @@
                     sessionStorage.setItem("selected_pid", JSON.stringify(selected_pet));
                     get_beauty_price(selected_pet);
                 }
-                // get_beauty_plan();
-
             });
 
             // 顯示寵物資訊
             function show_pet_info(arr) {
-                pet_list.innerHTML = '';
                 arr.forEach(element => {
+
+                    // 頭貼是否為空  img處 三元運算子處理  log是圖片字串
+                    // console.log('寵物大頭貼', element.pet_headphoto.split(',')[1]);
+
                     if (element.pet_species == '貓') {
-                        pet_list.innerHTML = `
+                        pet_list.innerHTML += `
                         <li class="dropdown-item d-flex align-items-center justify-content-between py-1 px-3" data-pid="${element.pid}" data-pet_species="${element.pet_species}" data-pet_weight="${element.pet_weight}" data-pet_fur="${element.pet_fur}" data-pet_name="${element.pet_name}">
-                            <img src="${element.pet_headphoto}" class="rounded-circle" alt="">
+                            <img src="${element.pet_headphoto.split(',')[1] ? element.pet_headphoto : "../img/20_beauty/petheadshot_none.png"}" class="rounded-circle" alt="">
                             <span>${element.pet_name}</span>
                             <span>${element.pet_species} | ${element.pet_fur}</span>
                         </li>`;
@@ -268,9 +270,9 @@
                         } else if (element.pet_weight < 40) {
                             pet_size = 2;
                         }
-                        pet_list.innerHTML = `
+                        pet_list.innerHTML += `
                         <li class="dropdown-item d-flex align-items-center justify-content-between py-1 px-3" data-pid="${element.pid}" data-pet_species="${element.pet_species}" data-pet_weight="${element.pet_weight}" data-pet_fur="${element.pet_fur}" data-pet_name="${element.pet_name}">
-                            <img src="${element.pet_headphoto}" class="rounded-circle" alt="">
+                            <img src="${element.pet_headphoto.split(',')[1] ? element.pet_headphoto : "../img/20_beauty/petheadshot_none.png"}" class="rounded-circle" alt="">
                             <span>${element.pet_name}</span>
                             <span>${element.pet_species} | ${size[pet_size]} | ${element.pet_fur}</span>
                         </li>`;
@@ -311,7 +313,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-8 col-12">
                                     <div class="my-2"><span class="fs-5">${element.plan_title}</span></div>
-                                    <div class="text-muted"><span>${selelcted_pet.pet_species} | ${size[pet_size]} </span><span>${hour}小時${minute}分鐘</span></div>
+                                    <div class="text-muted"><span>${selelcted_pet.pet_species} | ${size[pet_size]} | ${selelcted_pet.pet_fur} </span><span>${parseInt(hour)}小時${minute}分鐘</span></div>
                                     <div class="text-muted">
                                         <p>${element.plan_instructions}</p>
                                         <p>（含：剪指甲、清耳朵、小修頭型、小修足緣、剃腳底毛、剃肛門毛擠肛門腺）</p>
@@ -326,7 +328,9 @@
                     });
                 } else {
                     // 貓
-                    arr.forEach(element => {
+                    arr.forEach((element, index) => {
+                        let [hour, minute, sec] = beauty_plan_info[index].time.split(':');
+
                         // 顯示抓出來的方案資料
                         // console.log(`${element.plan_title} - ${element.plan_instructions} - ${element.beauty_img}+++<br>`);
                         beauty_plan_div.innerHTML += `
@@ -337,7 +341,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-8 col-12">
                                     <div class="my-2"><span class="fs-5">${element.plan_title}</span></div>
-                                    <div class="text-muted"><span>${selelcted_pet.pet_species} </span><span>${hour}小時${minute}分鐘</span></div>
+                                    <div class="text-muted"><span>${selelcted_pet.pet_species} | ${selelcted_pet.pet_fur} </span><span>${parseInt(hour)}小時${minute}分鐘</span></div>
                                     <div class="text-muted">
                                         <p>${element.plan_instructions}</p>
                                         <p>（含：剪指甲、清耳朵、小修頭型、小修足緣、剃腳底毛、剃肛門毛擠肛門腺）</p>
@@ -374,7 +378,7 @@
 
                 // 這邊還要改   我在這裡
                 // uid 飼主id
-                let uid = 1;
+                let uid = 2;
                 // fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)
                 //     .then(res => res.json())
                 //     .then(data => {

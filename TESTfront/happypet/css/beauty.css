@@ -154,9 +154,17 @@ footer a,footer i{
 }
 
 /* 正方形 */
-#pet_list img, #pet_select img {
+#pet_list>li>img, #pet_select>img {
     max-height: 100%;
     aspect-ratio: 1 / 1;
+}
+
+#pet_select>img {
+    width: 49px;
+}
+
+#pet_list>li>img {
+    width: 42.6px;
 }
 
 /* 新增front2 */
@@ -164,6 +172,22 @@ footer a,footer i{
 /* 新增front2 */
 /* 新增front2 */
 /* 新增front2 */
+
+.visibility_hidden {
+    visibility: hidden;
+}
+
+#pet_list>div:hover {
+    cursor: pointer;
+}
+
+#pet_list>div {
+    border: var(--bs-border-color) solid 2px;
+}
+
+#pet_list>.border_color_self {
+    border: var(--color-primary) solid 2px;
+}
 
 .pet_photo_Thumbnail {
     width: 50px;
