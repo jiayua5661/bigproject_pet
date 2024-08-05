@@ -215,12 +215,12 @@
                             <div class="p-3 d-flex justify-content-between bgc_primary_self">
                                 <div class="fs-5 text-white">
                                     <i class="fa-solid fa-paw"></i>
-                                    <span class="ms-1">小白</span>
+                                    <span class="ms-1" id="detail_pet_name">小白</span>
                                 </div>
-                                <div class="text-white text-center fs-5">台中店</div>
+                                <div class="text-white text-center fs-5" id="detail_branch">台中店</div>
                             </div>
                             <div class="py-3">
-                                <div class="py-1 px-3 fs-5">小美容</div>
+                                <div class="py-1 px-3 fs-5" id="detail_beauty_plan_title">小美容</div>
                                 <div class="py-1 px-4">
                                     <i class="fa-solid fa-paw"></i>
                                     <span>狗 | 小型犬 | 短毛</span>
@@ -236,7 +236,7 @@
                                 <div class="py-1 px-4">
                                     <i class="bi bi-clock-fill"></i>
                                     <span>預計時長 : </span>
-                                    <span>1小時</span>
+                                    <span id="deatail_beauty_plan_time">1小時</span>
                                 </div>
                             </div>
                         </div>
@@ -419,6 +419,35 @@
 
         window.onload = () => {
             createcalender();
+
+            // 拿 會員寵物資料
+            async function get_pet_info() {
+
+                // 這邊還要改   我在這裡
+                // uid 飼主id
+                let uid = 1;
+
+                let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
+                console.log('拿到的寵物資訊', pet_info);
+            }
+            
+            get_pet_info();
+
+            // 帶上一頁選的資料 初始化這一頁
+            function from_front1_info() {
+                
+                let data = JSON.parse(sessionStorage.getItem('beauty_plan_price_time')).pet_name;
+                detail_pet_name.innerHTML = JSON.parse(sessionStorage.getItem('selected_pid')).pet_name;
+                detail_branch.innerHTML = sessionStorage.getItem('branch_select');
+                detail_beauty_plan_title.innerHTML = sessionStorage.getItem('plan_title');
+            }
+
+            from_front1_info()
+
+
+
+
+
         }
 
     </script>
