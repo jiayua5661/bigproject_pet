@@ -13,7 +13,7 @@ $uid = $_REQUEST['uid'];
 try {
 
     $db = new PDO("mysql:host=${host};dbname=${dbname};charset=utf8mb4", $user);
-    $sql = "select pet_name, pet_headphoto, pet_species, pet_weight, pet_fur from pet_info where uid = ${uid}";
+    $sql = "select pid, pet_name, pet_headphoto, pet_species, pet_weight, pet_fur from pet_info where uid = ${uid}";
     $stmt =$db->prepare($sql);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
