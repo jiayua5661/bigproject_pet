@@ -76,7 +76,8 @@
                     <div>
                         <h5 class="my-3 ps-4">選擇我的寵物</h5>
                         <div id="pet_list">
-                            <div class="p-4 d-flex align-items-center justify-content-between mb-3 border_color_self" onclick="select_pet()">
+                            <div class="p-4 d-flex align-items-center justify-content-between mb-3 border_color_self"
+                                onclick="select_pet()">
                                 <img src="../img/20_beauty/petheadshot_none.png" alt=""
                                     class="pet_photo_Thumbnail me-3">
                                 <span class="flex-grow-1">name</span>
@@ -84,7 +85,8 @@
                                 <!-- <i class="bi bi-pencil-square fs-5 text-muted ms-3"></i> -->
                                 <i class="bi bi-check fs-3 ms-3 color_primary_self"></i>
                             </div>
-                            <div class="p-4 d-flex align-items-center justify-content-between mb-3" onclick="select_pet()">
+                            <div class="p-4 d-flex align-items-center justify-content-between mb-3"
+                                onclick="select_pet()">
                                 <img src="../img/20_beauty/petheadshot_none.png" alt=""
                                     class="pet_photo_Thumbnail me-3">
                                 <span class="flex-grow-1">name</span>
@@ -352,7 +354,13 @@
             for (let k = 0; k < 6; k++) {
                 newcalender += '<tr class="d-flex justify-content-around">';
                 for (let i = 0; i < 7; i++) {
-                    if (newday < today) {
+                    // 禮拜日不能選
+                    if (i == 0) {
+                        newcalender += `<td class="py-2 over_date" 
+                        data-date='${newday.getFullYear()}-${newday.getMonth() + 1}-${newday.getDate()}'>
+                        ${newday.getDate()}</td>`;
+                    }
+                    else if (newday < today) {
                         if (newday.getFullYear() == today.getFullYear() && newday.getMonth() == today.getMonth() && newday.getDate() == today.getDate()) {
                             // 今天可以選 因為靜態變數 同天 today秒數比較大 會進來 要例外處理
                             newcalender += `<td class="py-2 rounded-circle" 
@@ -435,6 +443,18 @@
             $('#pet_list>.border_color_self').removeClass('border_color_self');
         }
 
+        function get_beauty_plan_price_time({ pet_species, pet_weight, pet_fur }, planid) {
+                fetch(`http://localhost/test/back/front2_select_beauty_plan_price_time.php?pet_species=${pet_species}&pet_weight=${pet_weight}&pet_fur=${pet_fur}&planid=${planid}`)
+                .then(res => res.json())
+                    .then(result => {
+                        console.log('改變選擇寵物的美容價格時間', result);
+                        console.log('改變選擇寵物的美容價格時間', JSON.stringify(result));
+                        sessionStorage.setItem('beauty_plan_price_time', JSON.stringify(result));
+                        detail_beauty_plan_price.innerHTML = `NT$ ${result[0].price}`;
+                        deatail_beauty_plan_time.innerHTML = `${parseInt(result[0].time.split(':')[0])}小時${result[0].time.split(':')[1]}分鐘`;
+                    })
+            }
+
         // 選擇寵物
         function select_pet(this_ele) {
             // console.log('選寵物', this_ele);
@@ -444,11 +464,32 @@
             detail_pet_name.innerText = $(this_ele).children('span')[0].innerText;
             detail_pet_info.innerText = $(this_ele).children('span')[1].innerText;
 
-            let selected_pet = { pid: $(this_ele).data("pid"), pet_species: $(this_ele).data("pet_species"), pet_weight: $(this_ele).data("pet_weight"), pet_fur: $(this_ele).data("pet_fur"), pet_name: $(this_ele).data("pet_name")};
+            let selected_pet = { pid: $(this_ele).data("pid"), pet_species: $(this_ele).data("pet_species"), pet_weight: $(this_ele).data("pet_weight"), pet_fur: $(this_ele).data("pet_fur"), pet_name: $(this_ele).data("pet_name") };
             sessionStorage.setItem("selected_pid", JSON.stringify(selected_pet));
+            let pet_sel_planid = sessionStorage.getItem('planid');
+            get_beauty_plan_price_time(selected_pet, pet_sel_planid);
         }
 
         window.onload = () => {
+
+            // function get_beauty_plan_price_time({ pet_species, pet_weight, pet_fur }, planid) {
+            //     fetch('url', {
+            //         method: 'POST',
+            //         body: JSON.stringify({
+            //             pet_species, 
+            //             pet_weight, 
+            //             pet_fur, 
+            //             planid
+            //         }),
+            //         headers: {
+            //             'Content-Type': 'application/json; charset=utf-8'
+            //         }
+            //     }).then(res => res.json())
+            //         .then(result => {
+            //             console.log('改變選擇寵物的美容價格時間', result);
+                        
+            //         })
+            // }
 
             // 顯示寵物資料
             function show_pet_info(arr) {
