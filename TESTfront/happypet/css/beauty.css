@@ -226,39 +226,3 @@ footer a,footer i{
 .cursor_pointer {
     cursor: pointer;
 }
-
-/* 新增beautyback */
-/* 新增beautyback */
-/* 新增beautyback */
-/* 新增beautyback */
-/* 新增beautyback */
-
-.back_bgimg {
-    background: url(../img/00_index/geometry.png);
-}
-
-.beauty_back_table td,.beauty_back_table th {
-    border: 1px solid black;
-    height: 60px;
-}
-
-.beauty_back_table td:first-child {
-    width: 9%;
-}
-
-.beauty_back_table div {
-    flex: 1;
-    margin: 1px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.beauty_back_table div:first-child {
-    background-color: #e4b0b4;
-}
-
-.beauty_back_table div:nth-child(2) {
-    background-color:#f5ca7c;
-}
