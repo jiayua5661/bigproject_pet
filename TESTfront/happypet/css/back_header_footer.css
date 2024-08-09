@@ -172,6 +172,11 @@ main {
     background-color: var(--color-primary);
 }
 
+.beauty_back_table {
+    z-index: 1;
+    position: relative;
+}
+
 .beauty_back_table td,
 .beauty_back_table th {
     border: 1px solid black;
@@ -191,6 +196,7 @@ main {
 #canvas_out_div {
     position: absolute;
     top: 107px;
+    z-index: 99;
     /* left: 190px; */
 }
 
@@ -198,12 +204,18 @@ main {
     width: 90%;
     position: relative;
     display: inline-block;
-
+    left: 1px;
+    top: 1px;
 }
 
 .left_box {
     width: 10%;
     display: inline-block;
+}
+
+.order_box { 
+    position: absolute;
+    z-index: 99;
 }
 
 /* .beauty_back_table div {
