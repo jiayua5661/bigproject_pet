@@ -133,7 +133,6 @@ footer a,footer i{
 
 .color_primary_self {
     color: var(--color-primary);
-    font-size: x-large;
 }
 
 .bgc_primary_self {

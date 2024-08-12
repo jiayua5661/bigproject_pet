@@ -213,7 +213,7 @@
                                 上一步</div>
                         </div>
                         <div class="col-6">
-                            <div class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
+                            <div id="appointment_confirmation" class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
                                 確定預約</div>
                         </div>
                     </div>
@@ -398,6 +398,10 @@
         function selectdate(seldate) {
             const dayofweek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             let datearr = seldate.dataset.date.split('-');
+            console.log(seldate.dataset.date,datearr);
+            
+            // fetch()
+
             // 星期幾
             let select_day = new Date(datearr[0], datearr[1] - 1, datearr[2]).getDay();
             show_selectdate.innerHTML = `${datearr[0]} / ${datearr[1]} / ${datearr[2]} ${dayofweek[select_day]}`;
@@ -573,7 +577,13 @@
                 detail_branch.innerHTML = sessionStorage.getItem('branch_select');
                 // 方案名
                 detail_beauty_plan_title.innerHTML = sessionStorage.getItem('plan_title');
-            }
+            }            
+
+            // 確定預約
+            document.getElementById('appointment_confirmation').addEventListener('click', function() {
+
+                
+            })
 
 
             createcalender();
@@ -581,7 +591,6 @@
             get_pet_info();
 
             from_front1_info();
-
 
 
 

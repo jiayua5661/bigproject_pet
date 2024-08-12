@@ -88,11 +88,13 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="ps-4 mb-0">美容後台畫面</h5>
                 <div id="select_week">
-                    <button class="me-4 px-4 py-2">上一週</button>
-                    <button class="me-5 px-4 py-2">下一週</button>
+                    <button class="me-4 px-4 py-2" id="last_week">上一週</button>
+                    <button class="me-5 px-4 py-2" id="next_week">下一週</button>
                 </div>
             </div>
-            <div class="mt-4">
+
+            <!-- 一周時間表 -->
+            <div class="mt-4" id="beauty_back_table_div">
 
                 <table class="beauty_back_table w-100 text-center">
                     <tbody>
@@ -443,6 +445,7 @@
                         </tr>
                     </tbody>
                 </table>
+
             </div>
 
             <!-- 彈出視窗 -->
@@ -456,9 +459,9 @@
                         </div>
                         <div class="modal-body row">
                             <div class="d-flex container col-12">
-                                <div class="me-4">
-                                    <img src="../img/20_beauty/petheadshot_none.png" alt=""
-                                        class="back_petimg rounded-circle">
+                                <div class="me-4 back_petimg_div">
+                                    <img id="show_window_pet_headphoto" src="../img/20_beauty/petheadshot_none.png"
+                                        alt="" class="img-fluid rounded-circle">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
                                     <p>名字 : <span id="show_window_pet_name">小白</span></p>
@@ -475,7 +478,9 @@
                                 </div>
                                 <div class="p-3 mt-3 col-12 border">
                                     <p>歷史紀錄:</p>
-                                    <p>2021/08/05 大美容</p>
+                                    <div id="history_order">
+                                        <p>2021/08/05 大美容</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -495,7 +500,7 @@
             <div class="w-90" id="canvas_div">
                 <!-- <canvas id="myCanvas" width="70" height="160" style="position: absolute; border: black solid 1px; background-color: rgb(255, 255, 255); top: 0px; left: 0px;"></canvas> -->
 
-                <div class="order_box"
+                <!-- <div class="order_box"
                     style="top: 40px;  left: 0px;  height: 80px;  width: 5.555%; background-color: aquamarine;">ssss
                 </div>
                 <div class="order_box"
@@ -506,7 +511,7 @@
                 </div>
                 <div class="order_box"
                     style="top: 560px;  left: 94.435%;  height: 80px;  width: 5.555%; background-color: aquamarine;">
-                    ssss</div>
+                    ssss</div> -->
             </div>
 
         </div>
@@ -517,11 +522,11 @@
     <script type="application/javascript">
 
         // 顯示已預約訂單 到畫面上
-        function draw(arr) {
+        function draw(arr, order_create_day) {
             canvas_div.innerHTML = '';
             console.log(arr);
             // 周一
-            let this_week_first_day = new Date();
+            let this_week_first_day = new Date(order_create_day);
             this_week_first_day.setDate(this_week_first_day.getDate() + 1 - this_week_first_day.getDay());
             this_week_first_day.setHours(8);
             this_week_first_day.setMinutes(0);
@@ -530,7 +535,7 @@
             console.log('第一天', this_week_first_day);
 
             // 周六
-            let this_week_last_day = new Date();
+            let this_week_last_day = new Date(order_create_day);
             this_week_last_day.setDate(this_week_last_day.getDate() + 1 - this_week_last_day.getDay() + 5);
             this_week_last_day.setHours(8);
             this_week_last_day.setMinutes(0);
@@ -584,7 +589,7 @@
                     }
                     if (order_in) {
                         canvas_div.innerHTML += `
-                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModal" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.5%; background-color: white;">${element.pet_name}</div>
+                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModal" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" data-pet_head="${element.pet_headphoto}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.5%; background-color: white;">${element.pet_name}</div>
                         `;
                         break;
                     }
@@ -616,27 +621,53 @@
     <script>
         window.onload = () => {
 
-            $('#canvas_div').on('click', 'div', function() {
+            // 彈出視窗
+            $('#canvas_div').on('click', 'div', function () {
+                let today_date = new Date();
+                today_date = `${today_date.getFullYear()}-${today_date.getMonth() + 1}-${today_date.getDate()}`;
                 show_window_pet_name.innerHTML = $(this).data('pet_name');
                 show_window_pet_birthday.innerHTML = $(this).data('pet_birthday');
                 show_window_username.innerHTML = $(this).data('user_name');
                 show_window_cellphone.innerHTML = $(this).data('cellphone');
                 show_window_plan_title.innerHTML = $(this).data('plan_title');
                 show_window_other.innerHTML = $(this).data('others');
-                fetch('url', )
+                show_window_pet_headphoto.src = $(this).data('pet_head').split(',')[1] ? $(this).data('pet_head') : '../img/20_beauty/petheadshot_none.png';
+                history_order.innerHTML = '';
+                fetch(`http://localhost/test/back/back_beauty_get_history_order.php?pid=${$(this).data('pid')}&date=${today_date}`,).then(res => res.json()).then(data => {
+                    data.forEach(element => {
+                        history_order.innerHTML += `<p>${element.date} ${element.plan_title}</p>`;
+                    });
+                })
             })
 
-            
 
 
             // 取得單周訂單資料
-            async function get_beauty_order() {
+            async function get_beauty_order(x = 0) {
+
+                // 靜態變數
+                if (get_beauty_order.order_creatweek == 'undefined') {
+                    let order_creatweek = new Date();
+                }
+                // 按輸入框生成今天這個月
+                if (x == 0) {
+                    console.log('今天');
+                    order_creatweek = new Date();
+                } else if (x == -1) { // 上周
+                    console.log('上周');
+                    order_creatweek.setDate(order_creatweek.getDate() - 7);
+                } else if (x == 1) {  // 下周
+                    console.log('下周');
+                    order_creatweek.setDate(order_creatweek.getDate() + 7);
+                }
+
+
                 // 週一
-                let create_week_first_day = new Date();
+                let create_week_first_day = new Date(order_creatweek);
                 create_week_first_day.setDate(create_week_first_day.getDate() + 1 - create_week_first_day.getDay());
                 console.log(create_week_first_day);
                 // 週六
-                let create_week_last_day = new Date();
+                let create_week_last_day = new Date(order_creatweek);
                 create_week_last_day.setDate(create_week_last_day.getDate() + 1 - create_week_last_day.getDay() + 5);
                 console.log(create_week_last_day);
 
@@ -646,32 +677,408 @@
                 console.log(first_date, last_date);
                 let beauty_order_info = await (await fetch(`http://localhost/test/back/back_beauty_get_order.php?first_date=${first_date}&last_date=${last_date}`)).json();
                 // console.log(beauty_order_info);
-                draw(beauty_order_info);
+                draw(beauty_order_info, order_creatweek);
             }
+
             get_beauty_order();
 
             // 生成一周時間表
-            function create_schedule() {
+            function create_schedule(x = 0) {
+
+                // 靜態變數
+                if (create_schedule.creatweek == 'undefined') {
+                    let creatweek = new Date();
+                }
+                // 按輸入框生成今天這個月
+                if (x == 0) {
+                    console.log('今天');
+                    creatweek = new Date();
+                } else if (x == -1) { // 上周
+                    console.log('上周');
+                    creatweek.setDate(creatweek.getDate() - 7);
+                } else if (x == 1) {  // 下周
+                    console.log('下周');
+                    creatweek.setDate(creatweek.getDate() + 7);
+                }
 
                 // 這周周一
-                let create_week = new Date();
-                create_week.setDate(create_week.getDate() + 1 - create_week.getDay());
-                // console.log(create_week);
+                let create_week = new Date(creatweek);
 
-                let new_week_schedule = `<table class="beauty_back_table w-100 text-center">
+                create_week.setDate(create_week.getDate() + 1 - create_week.getDay());
+                console.log('生成', create_week);
+
+                const week_day = ['一', '二', '三', '四', '五', '六'];
+
+                let new_week_schedule = `
+                    <table class="beauty_back_table w-100 text-center">
                     <tbody>
                         <tr class="bgc_primary_self text-white">
                             <th></th>`;
                 for (let i = 0; i < 6; i++) {
-                    console.log(create_week.getMonth() + 1, create_week.getDate());
-
-                    new_week_schedule += `<th colspan="3">${create_week.getMonth() + 1}/${create_week.getDate()}</th>`;
+                    // console.log(create_week.getMonth() + 1, create_week.getDate());
+                    new_week_schedule += `<th colspan="3">${create_week.getMonth() + 1}/${create_week.getDate()}  ${week_day[i]}</th>`;
+                    create_week.setDate(create_week.getDate() + 1);
                 }
+                new_week_schedule += `
+                        </tr>
+                        <tr>
+                            <td>10:00~10:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>10:30~11:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>11:00~11:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>11:30~12:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>12:00~12:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>12:30~13:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>13:00~13:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>13:30~14:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>14:00~14:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>14:30~15:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>15:00~15:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>15:30~16:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>16:00~16:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>16:30~17:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>17:00~17:30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>17:30~18:00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>`;
 
-
-
+                beauty_back_table_div.innerHTML = new_week_schedule;
             }
-            create_schedule()
+
+
+            // 上一周
+            document.getElementById('last_week').addEventListener('click', function () {
+                create_schedule(-1);
+                get_beauty_order(-1);
+            });
+
+            // 下一周
+            document.getElementById('next_week').addEventListener('click', function () {
+                create_schedule(1);
+                get_beauty_order(1);
+            });
+
+            create_schedule();
+
+
         }
     </script>
 </body>

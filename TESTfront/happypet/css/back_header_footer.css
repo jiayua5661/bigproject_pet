@@ -165,7 +165,6 @@ main {
 
 .color_primary_self {
     color: var(--color-primary);
-    font-size: x-large;
 }
 
 .bgc_primary_self {
@@ -216,6 +215,11 @@ main {
 .order_box { 
     position: absolute;
     z-index: 99;
+}
+
+.back_petimg_div {
+    width: 140px;
+    height: 140px;
 }
 
 /* .beauty_back_table div {
