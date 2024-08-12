@@ -213,7 +213,8 @@
                                 上一步</div>
                         </div>
                         <div class="col-6">
-                            <div id="appointment_confirmation" class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
+                            <div id="appointment_confirmation"
+                                class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
                                 確定預約</div>
                         </div>
                     </div>
@@ -398,9 +399,12 @@
         function selectdate(seldate) {
             const dayofweek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             let datearr = seldate.dataset.date.split('-');
-            console.log(seldate.dataset.date,datearr);
-            
-            // fetch()
+            // console.log(seldate.dataset.date, datearr);
+
+            order_date = datearr[0] + '-' + datearr[1].padStart(2, '0') + '-' + datearr[2].padStart(2, '0');
+            // console.log(order_date);
+            // 確定預約按鈕要拿的資料 date
+            sessionStorage.setItem('appointment_confirmation_date', order_date);
 
             // 星期幾
             let select_day = new Date(datearr[0], datearr[1] - 1, datearr[2]).getDay();
@@ -408,6 +412,7 @@
             selectdate_clear();
             $(seldate).css({ backgroundColor: '#90b9ab', color: 'white' });
             create_time_select();
+
         }
 
         // 換日期 清空原本顏色
@@ -417,16 +422,93 @@
 
         // 生成時間
         function create_time_select() {
-            let new_timesel = '<div class="row px-2 text-center mt-5">';
-            for (let i = 9; i < 17; i++) {
-                new_timesel += `<div class="col-3 py-1 px-2">`;
-                new_timesel += `<div onclick='select_time(this)' class="cursor_pointer fs-5 py-1 border rounded border-secondary select_time_box" data-time='${i.toString().padStart(2, 0)}:00'>${i.toString().padStart(2, 0)}:00</div>`;
-                new_timesel += `</div>`;
-                new_timesel += `<div class="col-3 py-1 px-2">`;
-                new_timesel += `<div onclick='select_time(this)' class="cursor_pointer fs-5 py-1 border rounded border-secondary select_time_box" data-time='${i.toString().padStart(2, 0)}:30'>${i.toString().padStart(2, 0)}:30</div>`;
-                new_timesel += `</div>`;
-            }
-            add_time_div.innerHTML = new_timesel;
+
+            console.log('時間生成', sessionStorage.getItem('appointment_confirmation_date'));
+            // let sel_date = sessionStorage.getItem('appointment_confirmation_date');
+            let sel_date = '2024-08-05';
+            console.log('時間生成', sessionStorage.getItem('f2_select_beauty_plan_price_time'));
+            console.log('時間生成', JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time);
+            
+            let my_plan_use_time = parseInt(JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time.split(':')[0]) * 2 + parseInt(JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time.split(':')[1] / 30);
+            console.log('佔據的半小時數', my_plan_use_time);
+
+            // lala fetch
+            fetch(`http://localhost/testlaravel/public/api/beauty_front2_get_schedule_fortime/${sel_date}`)
+                .then(res => res.json())
+                .then(sel_date_order => {
+                    console.log(sel_date_order);
+
+                    // 二維陣列 存 選的當天已有的訂單時間 來判斷能不能預約  schedule
+                    let order_time = [];
+                    for (i = 0; i < 16; i++) {
+                        order_time[i] = [];
+                    }
+
+                    sel_date_order.forEach(element => {
+                        console.log(element.start_time);
+                        console.log(element.use_time);
+                        let start_time = (parseInt(element.start_time.split(" ")[1].split(':')[0]) - 10) * 2 + parseInt(element.start_time.split(" ")[1].split(':')[1]) / 30;
+                        let half_hour = parseInt(element.use_time.split(":")[0]) * 2 + parseInt(element.use_time.split(":")[1]) / 30;
+
+                        // 每個order拿出來存使用的時間到陣列
+                        for (c = 0; c < 3; c++) {
+                            let empty_space = 0;
+                            let order_in = 0;
+                            for (i = 0; i < half_hour; i++) {
+                                if (order_time[start_time + i][c] == undefined) {
+                                    empty_space += 1;
+                                    if (empty_space == half_hour) {
+                                        order_in = 1;
+                                        for (n = 0; n < half_hour; n++) {
+                                            order_time[start_time + n][c] = element.boid;
+                                        }
+                                    }
+                                }
+                            }
+                            if (order_in) {
+                                break;
+                            }
+                        }
+                    });
+
+                    console.log(order_time);
+                    console.log('新訂單占用時間', my_plan_use_time);
+
+                    let new_timesel = '<div class="row px-2 text-center mt-5">';
+                    for (let i = 0; i < 16; i++) {
+
+                        for (c = 0; c < 3; c++) {
+                            let empty_space = 0;
+                            let order_in = 0;
+                            for (k = 0; k < my_plan_use_time; k++) {
+                                if ((i + k) > 15) {
+                                    break;
+                                }
+                                if (typeof order_time[i + k][c] == "undefined") {
+                                    empty_space += 1;
+                                    if (empty_space == my_plan_use_time) {
+                                        order_in = 1;
+                                    }
+                                }
+                            }
+                            if (order_in) {
+                                new_timesel += `<div class="col-3 py-1 px-2">`;
+                                new_timesel += `<div onclick='select_time(this)' class="cursor_pointer fs-5 py-1 border rounded border-secondary select_time_box" data-time='${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}'>${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}</div>`;
+                                new_timesel += `</div>`;
+                                break;
+                            } else if (c == 2) {
+                                // 不能選的時間
+                                new_timesel += `<div class="col-3 py-1 px-2">`;
+                                new_timesel += `<div class="cursor_not_allowed fs-5 py-1 border rounded border-secondary select_time_box color_primary_self" data-time='${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}'>${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}</div>`;
+                                new_timesel += `</div>`;
+                            }
+                        }
+                    }
+                    new_timesel += `</div>`;
+                    add_time_div.innerHTML = new_timesel;
+
+                })
+
         }
 
         // 選擇時間
@@ -434,6 +516,12 @@
             show_selecttime.innerHTML = item.dataset.time;
             selecttime_clear();
             $(item).css({ backgroundColor: '#90b9ab', color: 'white' });
+
+
+            // console.log(item.dataset.time + ":00.000");
+            // 確定預約按鈕要拿的資料 time
+            sessionStorage.setItem('appointment_confirmation_start_time', `${item.dataset.time}:00.000`);
+
         }
 
         // 清除之前選擇時間
@@ -447,20 +535,30 @@
             $('#pet_list>.border_color_self').removeClass('border_color_self');
         }
 
+        // 改變選擇寵物的美容價格時間
         function get_beauty_plan_price_time({ pet_species, pet_weight, pet_fur }, planid) {
-                fetch(`http://localhost/test/back/front2_select_beauty_plan_price_time.php?pet_species=${pet_species}&pet_weight=${pet_weight}&pet_fur=${pet_fur}&planid=${planid}`)
+            fetch(`http://localhost/test/back/front2_select_beauty_plan_price_time.php?pet_species=${pet_species}&pet_weight=${pet_weight}&pet_fur=${pet_fur}&planid=${planid}`)
                 .then(res => res.json())
-                    .then(result => {
-                        console.log('改變選擇寵物的美容價格時間', result);
-                        console.log('改變選擇寵物的美容價格時間', JSON.stringify(result));
-                        sessionStorage.setItem('beauty_plan_price_time', JSON.stringify(result));
-                        detail_beauty_plan_price.innerHTML = `NT$ ${result[0].price}`;
-                        deatail_beauty_plan_time.innerHTML = `${parseInt(result[0].time.split(':')[0])}小時${result[0].time.split(':')[1]}分鐘`;
-                    })
-            }
+                .then(result => {
+                    result = result[0];
+                    console.log('改變選擇寵物的美容價格時間', result);
+                    console.log('改變選擇寵物的美容價格時間', JSON.stringify(result));
+                    sessionStorage.setItem('f2_select_beauty_plan_price_time', JSON.stringify(result));
+                    detail_beauty_plan_price.innerHTML = `NT$ ${result.price}`;
+                    deatail_beauty_plan_time.innerHTML = `${parseInt(result.time.split(':')[0])}小時${result.time.split(':')[1]}分鐘`;
+
+
+                    if (sessionStorage.getItem('appointment_confirmation_date')) {
+                        console.log('換寵物 生成時間');
+
+                        create_time_select();
+                    }
+                })
+        }
 
         // 選擇寵物
         function select_pet(this_ele) {
+
             // console.log('選寵物', this_ele);
             select_pet_clear();
             $(this_ele).addClass('border_color_self');
@@ -472,6 +570,7 @@
             sessionStorage.setItem("selected_pid", JSON.stringify(selected_pet));
             let pet_sel_planid = sessionStorage.getItem('planid');
             get_beauty_plan_price_time(selected_pet, pet_sel_planid);
+
         }
 
         window.onload = () => {
@@ -491,7 +590,7 @@
             //     }).then(res => res.json())
             //         .then(result => {
             //             console.log('改變選擇寵物的美容價格時間', result);
-                        
+
             //         })
             // }
 
@@ -544,6 +643,9 @@
                 // uid 飼主id
                 let uid = 1;
 
+                // 確定預約按鈕要拿的資料 uid
+                sessionStorage.setItem('appointment_confirmation_uid', uid);
+
                 let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
                 console.log('拿到的寵物資訊', pet_info);
                 show_pet_info(pet_info);
@@ -551,11 +653,17 @@
 
             // 帶上一頁選的資料 初始化這一頁
             function from_front1_info() {
+
+
                 // 預計時長 錢
                 let beauty_plan_data = JSON.parse(sessionStorage.getItem('beauty_plan_price_time'));
                 let beauty_plan_id = sessionStorage.getItem('planid');
                 deatail_beauty_plan_time.innerHTML = `${parseInt(beauty_plan_data[beauty_plan_id - 1].time.split(':')[0])}小時${beauty_plan_data[beauty_plan_id - 1].time.split(':')[1]}分鐘`;
                 detail_beauty_plan_price.innerHTML = `NT$ ${beauty_plan_data[beauty_plan_id - 1].price}`;
+
+                console.log('前面帶進來的挑選', beauty_plan_data[beauty_plan_id - 1]);
+                sessionStorage.setItem('f2_select_beauty_plan_price_time', JSON.stringify(beauty_plan_data[beauty_plan_id - 1]));
+
                 // 寵物資訊
                 let sel_pet_data = JSON.parse(sessionStorage.getItem('selected_pid'));
                 let size = ['小型犬', '中型犬', '大型犬'];
@@ -577,12 +685,18 @@
                 detail_branch.innerHTML = sessionStorage.getItem('branch_select');
                 // 方案名
                 detail_beauty_plan_title.innerHTML = sessionStorage.getItem('plan_title');
-            }            
+            }
 
             // 確定預約
-            document.getElementById('appointment_confirmation').addEventListener('click', function() {
+            document.getElementById('appointment_confirmation').addEventListener('click', function () {
+                console.log('uid', sessionStorage.getItem('appointment_confirmation_uid'));
+                console.log('planid', sessionStorage.getItem('planid'));
+                console.log('分店', sessionStorage.getItem('branch_select'));
+                console.log('預約日期', sessionStorage.getItem('appointment_confirmation_date'));
+                console.log('預約時間', sessionStorage.getItem('appointment_confirmation_start_time'));
+                console.log('pid', JSON.parse(sessionStorage.getItem('selected_pid')).pid);
 
-                
+
             })
 
 
