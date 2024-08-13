@@ -738,7 +738,6 @@
                 console.log('確定et', order_endtime);
                 console.log('確定price', order_price);
 
-
                 if (sessionStorage.getItem('appointment_confirmation_start_time')) {
                     console.log('有時間');
                     fetch(`http://localhost/testlaravel/public/api/beauty_front2_insert_order`, {
@@ -776,6 +775,7 @@
 
                             // 預約成功 跳轉頁面
                             window.setTimeout((() => document.location.href="./beauty_front1.html"), 5000)
+                            
                             
                         })
                 }
