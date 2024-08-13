@@ -39,8 +39,9 @@ header {
     border-bottom: 2px solid var(--color-primary);
     color: #1c97a7;
     font-weight: bold;
-    
+
 }
+
 .member {
     position: fixed;
     right: 25px;
@@ -49,11 +50,13 @@ header {
     display: block;
     font-size: 18px;
 }
+
 .nav_icon a {
     font-size: 28px;
     padding: 5px;
     color: #90b9ab;
 }
+
 .nav_icon a:hover {
     padding: 5px;
     color: #1c97a7;
@@ -61,41 +64,52 @@ header {
 }
 
 
-footer{
-    background-color:  #90b9ab;
+footer {
+    background-color: #90b9ab;
     font-size: 18px;
     overflow: hidden;
     position: relative;
     color: #fff;
 }
 
-footer .logo{
+footer .logo {
     max-height: 150px;
 }
-.footer_contact li{
+
+.footer_contact li {
     list-style: none;
     padding: 5px 0;
 }
-.footer_icon{
+
+.footer_icon {
     padding: 10px;
     font-size: 1.6rem;
 }
-footer a,footer i{
+
+footer a,
+footer i {
     color: #fff;
 }
-.copyright,.copyright a{
+
+.copyright,
+.copyright a {
     text-decoration: none;
     font-size: .8rem;
 }
-.bi-instagram,.bi-line,.bi-facebook{
+
+.bi-instagram,
+.bi-line,
+.bi-facebook {
     padding: 5px;
 }
-.footer_img{
+
+.footer_img {
     align-self: flex-end;
 }
-.footer_stamp{
+
+.footer_stamp {
     width: 23%;
-    filter: brightness(0.1) invert() ;
+    filter: brightness(0.1) invert();
     transform: rotate(-15deg);
     position: absolute;
     bottom: -25px;
@@ -103,8 +117,8 @@ footer a,footer i{
 }
 
 @media (max-width: 766px) {
-    .footer_stamp{
-       display: none;
+    .footer_stamp {
+        display: none;
     }
 }
 
@@ -139,7 +153,8 @@ footer a,footer i{
     background-color: var(--color-primary);
 }
 
-#pet_select, #branch_select {
+#pet_select,
+#branch_select {
     height: 66.6px;
 }
 
@@ -153,7 +168,8 @@ footer a,footer i{
 }
 
 /* 正方形 */
-#pet_list>li>img, #pet_select>img {
+#pet_list>li>img,
+#pet_select>img {
     max-height: 100%;
     aspect-ratio: 1 / 1;
 }
@@ -229,4 +245,9 @@ footer a,footer i{
 .cursor_not_allowed {
     cursor: not-allowed;
     color: lightgray;
+}
+
+.last_step {
+    text-decoration-line: none;
+    color: #212529;
 }

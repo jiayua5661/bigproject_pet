@@ -209,12 +209,15 @@
 
                     <div class="row text-center mt-4 mb-5 fs-5">
                         <div class="col-6">
-                            <div class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
-                                上一步</div>
+                            <a href="./beauty_front1.html" class="last_step">
+                                <div
+                                    class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
+                                    上一步</div>
+                            </a>
                         </div>
                         <div class="col-6">
                             <div id="appointment_confirmation"
-                                class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer">
+                                class="p-2 border border-secondary shadow rounded-3 order_time_check cursor_pointer visibility_hidden">
                                 確定預約</div>
                         </div>
                     </div>
@@ -260,6 +263,14 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body d-flex justify-content-center">
+                    預約成功
+                </div>
+            </div>
         </div>
 
 
@@ -424,11 +435,11 @@
         function create_time_select() {
 
             console.log('時間生成', sessionStorage.getItem('appointment_confirmation_date'));
-            // let sel_date = sessionStorage.getItem('appointment_confirmation_date');
-            let sel_date = '2024-08-05';
+            let sel_date = sessionStorage.getItem('appointment_confirmation_date');
+            // let sel_date = '2024-08-05';
             console.log('時間生成', sessionStorage.getItem('f2_select_beauty_plan_price_time'));
             console.log('時間生成', JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time);
-            
+
             let my_plan_use_time = parseInt(JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time.split(':')[0]) * 2 + parseInt(JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time')).time.split(':')[1] / 30);
             console.log('佔據的半小時數', my_plan_use_time);
 
@@ -499,7 +510,7 @@
                             } else if (c == 2) {
                                 // 不能選的時間
                                 new_timesel += `<div class="col-3 py-1 px-2">`;
-                                new_timesel += `<div class="cursor_not_allowed fs-5 py-1 border rounded border-secondary select_time_box color_primary_self" data-time='${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}'>${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}</div>`;
+                                new_timesel += `<div class="cursor_not_allowed fs-5 py-1 border rounded border-secondary color_primary_self" data-time='${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}'>${(parseInt(i / 2) + 10).toString()}:${((i % 2) * 30).toString().padStart(2, 0)}</div>`;
                                 new_timesel += `</div>`;
                             }
                         }
@@ -517,10 +528,11 @@
             selecttime_clear();
             $(item).css({ backgroundColor: '#90b9ab', color: 'white' });
 
-
             // console.log(item.dataset.time + ":00.000");
             // 確定預約按鈕要拿的資料 time
             sessionStorage.setItem('appointment_confirmation_start_time', `${item.dataset.time}:00.000`);
+
+            $('#appointment_confirmation').css({ "visibility": "visible" });
 
         }
 
@@ -687,27 +699,93 @@
                 detail_beauty_plan_title.innerHTML = sessionStorage.getItem('plan_title');
             }
 
+            const toastLiveExample = document.getElementById('liveToast');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
             // 確定預約
             document.getElementById('appointment_confirmation').addEventListener('click', function () {
-                console.log('uid', sessionStorage.getItem('appointment_confirmation_uid'));
-                console.log('planid', sessionStorage.getItem('planid'));
-                console.log('分店', sessionStorage.getItem('branch_select'));
-                console.log('預約日期', sessionStorage.getItem('appointment_confirmation_date'));
-                console.log('預約時間', sessionStorage.getItem('appointment_confirmation_start_time'));
-                console.log('pid', JSON.parse(sessionStorage.getItem('selected_pid')).pid);
+
+                console.clear();
+                let start_time_sel = sessionStorage.getItem('appointment_confirmation_start_time');
+                let beauty_plan_sel = JSON.parse(sessionStorage.getItem('f2_select_beauty_plan_price_time'));
+
+                let order_uid = sessionStorage.getItem('appointment_confirmation_uid');
+                let order_pid = JSON.parse(sessionStorage.getItem('selected_pid')).pid;
+                let order_planid = sessionStorage.getItem('planid');
+                let order_branch = sessionStorage.getItem('branch_select');
+                let order_date = sessionStorage.getItem('appointment_confirmation_date');
+                let order_start_time = `${order_date} ${start_time_sel}`;
+                let order_usetime = beauty_plan_sel.time;
+                let order_endtime = `${sessionStorage.getItem('appointment_confirmation_date')} ${(parseInt(start_time_sel.split(":")[1]) + parseInt(beauty_plan_sel.time.split(":")[1])) - 60 ? parseInt(start_time_sel.split(":")[0]) + parseInt(beauty_plan_sel.time.split(":")[0]) : parseInt(start_time_sel.split(":")[0]) + parseInt(beauty_plan_sel.time.split(":")[0]) + 1}:${(parseInt(start_time_sel.split(":")[1]) + parseInt(beauty_plan_sel.time.split(":")[1])) - 60 ? "30" : "00"}:00.000`;
+                let order_price = beauty_plan_sel.price;
+
+                // console.log('確定預約uid', sessionStorage.getItem('appointment_confirmation_uid'));
+                // console.log('確定預約planid', sessionStorage.getItem('planid'));
+                // console.log('確定預約分店', sessionStorage.getItem('branch_select'));
+                // console.log('確定預約預約日期', sessionStorage.getItem('appointment_confirmation_date'));
+                // console.log('確定預約開始時間', `${sessionStorage.getItem('appointment_confirmation_date')} ${start_time_sel}`);
+                // console.log('確定預約pid', JSON.parse(sessionStorage.getItem('selected_pid')).pid);
+                // console.log('確定預約價格', beauty_plan_sel.price);
+                // console.log('確定預約usetime', beauty_plan_sel.time);
+                // console.log('確定預約結束時間', `${sessionStorage.getItem('appointment_confirmation_date')} ${(parseInt(start_time_sel.split(":")[1]) + parseInt(beauty_plan_sel.time.split(":")[1])) -60 ? parseInt(start_time_sel.split(":")[0]) + parseInt(beauty_plan_sel.time.split(":")[0]) : parseInt(start_time_sel.split(":")[0]) + parseInt(beauty_plan_sel.time.split(":")[0]) + 1}:${(parseInt(start_time_sel.split(":")[1]) + parseInt(beauty_plan_sel.time.split(":")[1])) -60 ? "30" : "00"}:00.000`);
+
+                console.log('確定uid', order_uid);
+                console.log('確定pid', order_pid);
+                console.log('確定planid', order_planid);
+                console.log('確定branch', order_branch);
+                console.log('確定date', order_date);
+                console.log('確定st', order_start_time);
+                console.log('確定ut', order_usetime);
+                console.log('確定et', order_endtime);
+                console.log('確定price', order_price);
 
 
+                if (sessionStorage.getItem('appointment_confirmation_start_time')) {
+                    console.log('有時間');
+                    fetch(`http://localhost/testlaravel/public/api/beauty_front2_insert_order`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            uid: order_uid,
+                            pid: order_pid,
+                            planid: order_planid,
+                            branch: order_branch,
+                            date: order_date,
+                            start_time: order_start_time,
+                            use_time: order_usetime,
+                            end_time: order_endtime,
+                            price: order_price
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        }
+                    }).then(res => res.json())
+                        .then(result => {
+                            console.log(result);
+                            sessionStorage.removeItem("plan_title");
+                            sessionStorage.removeItem("beauty_plan_price_time");
+                            sessionStorage.removeItem("f2_select_beauty_plan_price_time");
+                            sessionStorage.removeItem("branch_select");
+                            sessionStorage.removeItem("planid");
+                            sessionStorage.removeItem("appointment_confirmation_uid");
+                            sessionStorage.removeItem("appointment_confirmation_start_time");
+                            sessionStorage.removeItem("selected_pid");
+                            sessionStorage.removeItem("appointment_confirmation_date");
+                            console.log('刪除sess');
+
+                            // 跳出右下角預定成功提示框
+                            toastBootstrap.show();
+
+                            // 預約成功 跳轉頁面
+                            window.setTimeout((() => document.location.href="./beauty_front1.html"), 5000)
+                            
+                        })
+                }
             })
-
 
             createcalender();
 
             get_pet_info();
 
             from_front1_info();
-
-
-
 
         }
 
