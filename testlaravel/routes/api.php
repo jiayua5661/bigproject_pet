@@ -5,10 +5,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\BeautyFrontController; 
 use App\Http\Controllers\BeautyBackController; 
+use App\Http\Controllers\UploadController; 
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('/upload', [UploadController::class, 'upload']);
 
 Route::get("/beauty_front2_get_schedule_fortime/{date}", function($date) {
     $result = DB::table("beauty_order")
