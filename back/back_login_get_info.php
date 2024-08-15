@@ -25,7 +25,7 @@ if (isset($headers['Authorization'])) {
             $decoded = JWT::decode($jwt, new key ($key, 'HS256'));
 
             $host = 'localhost';
-            $dbname = 'petdb';
+            $dbname = 'happypet_DB';
             $user = 'root';
             $password = '';
 

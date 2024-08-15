@@ -444,7 +444,7 @@
             console.log('佔據的半小時數', my_plan_use_time);
 
             // lala fetch
-            fetch(`http://localhost/testlaravel/public/api/beauty_front2_get_schedule_fortime/${sel_date}`)
+            fetch(`http://localhost/test/testlaravel/public/api/beauty_front2_get_schedule_fortime/${sel_date}`)
                 .then(res => res.json())
                 .then(sel_date_order => {
                     console.log(sel_date_order);
@@ -549,7 +549,28 @@
 
         // 改變選擇寵物的美容價格時間
         function get_beauty_plan_price_time({ pet_species, pet_weight, pet_fur }, planid) {
-            fetch(`http://localhost/test/back/front2_select_beauty_plan_price_time.php?pet_species=${pet_species}&pet_weight=${pet_weight}&pet_fur=${pet_fur}&planid=${planid}`)
+            // 純PHP
+            // fetch(`http://localhost/test/back/front2_select_beauty_plan_price_time.php?pet_species=${pet_species}&pet_weight=${pet_weight}&pet_fur=${pet_fur}&planid=${planid}`)
+            //     .then(res => res.json())
+            //     .then(result => {
+            //         result = result[0];
+            //         console.log('改變選擇寵物的美容價格時間', result);
+            //         console.log('改變選擇寵物的美容價格時間', JSON.stringify(result));
+            //         sessionStorage.setItem('f2_select_beauty_plan_price_time', JSON.stringify(result));
+            //         detail_beauty_plan_price.innerHTML = `NT$ ${result.price}`;
+            //         deatail_beauty_plan_time.innerHTML = `${parseInt(result.time.split(':')[0])}小時${result.time.split(':')[1]}分鐘`;
+
+
+            //         if (sessionStorage.getItem('appointment_confirmation_date')) {
+            //             console.log('換寵物 生成時間');
+
+            //             create_time_select();
+            //         }
+            //     })
+
+            // lala fetch
+            
+            fetch(`http://localhost/test/testlaravel/public/api/front2_beauty_select_beauty_plan_price_time/${pet_species}/${pet_weight}/${pet_fur}/${planid}`)
                 .then(res => res.json())
                 .then(result => {
                     result = result[0];
@@ -586,25 +607,6 @@
         }
 
         window.onload = () => {
-
-            // function get_beauty_plan_price_time({ pet_species, pet_weight, pet_fur }, planid) {
-            //     fetch('url', {
-            //         method: 'POST',
-            //         body: JSON.stringify({
-            //             pet_species, 
-            //             pet_weight, 
-            //             pet_fur, 
-            //             planid
-            //         }),
-            //         headers: {
-            //             'Content-Type': 'application/json; charset=utf-8'
-            //         }
-            //     }).then(res => res.json())
-            //         .then(result => {
-            //             console.log('改變選擇寵物的美容價格時間', result);
-
-            //         })
-            // }
 
             // 顯示寵物資料
             function show_pet_info(arr) {
@@ -657,8 +659,11 @@
 
                 // 確定預約按鈕要拿的資料 uid
                 sessionStorage.setItem('appointment_confirmation_uid', uid);
+                // 純PHP
+                // let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
 
-                let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
+                // lala fetch
+                let pet_info = await (await fetch(`http://localhost/test/testlaravel/public/api/front_beauty_pet_info/${uid}`)).json();
                 console.log('拿到的寵物資訊', pet_info);
                 show_pet_info(pet_info);
             }
@@ -740,7 +745,7 @@
 
                 if (sessionStorage.getItem('appointment_confirmation_start_time')) {
                     console.log('有時間');
-                    fetch(`http://localhost/testlaravel/public/api/beauty_front2_insert_order`, {
+                    fetch(`http://localhost/test/testlaravel/public/api/beauty_front2_insert_order`, {
                         method: 'POST',
                         body: JSON.stringify({
                             uid: order_uid,
@@ -774,9 +779,9 @@
                             toastBootstrap.show();
 
                             // 預約成功 跳轉頁面
-                            window.setTimeout((() => document.location.href="./beauty_front1.html"), 5000)
-                            
-                            
+                            window.setTimeout((() => document.location.href = "./beauty_front1.html"), 5000)
+
+
                         })
                 }
             })

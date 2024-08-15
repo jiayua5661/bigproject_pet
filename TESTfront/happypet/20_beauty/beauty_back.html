@@ -633,11 +633,20 @@
                 show_window_other.innerHTML = $(this).data('others');
                 show_window_pet_headphoto.src = $(this).data('pet_head').split(',')[1] ? $(this).data('pet_head') : '../img/20_beauty/petheadshot_none.png';
                 history_order.innerHTML = '';
-                fetch(`http://localhost/test/back/back_beauty_get_history_order.php?pid=${$(this).data('pid')}&date=${today_date}`,).then(res => res.json()).then(data => {
+
+                // lala fetch
+                fetch(`http://localhost/test/testlaravel/public/api/back_beauty_get_history_order_onepet/${$(this).data('pid')}/${today_date}`,).then(res => res.json()).then(data => {
                     data.forEach(element => {
                         history_order.innerHTML += `<p>${element.date} ${element.plan_title}</p>`;
                     });
                 })
+
+                // 純php
+                // fetch(`http://localhost/test/back/back_beauty_get_history_order.php?pid=${$(this).data('pid')}&date=${today_date}`,).then(res => res.json()).then(data => {
+                //     data.forEach(element => {
+                //         history_order.innerHTML += `<p>${element.date} ${element.plan_title}</p>`;
+                //     });
+                // })
             })
 
 
@@ -675,8 +684,14 @@
                 let last_date = `${create_week_last_day.getFullYear()}-${create_week_last_day.getMonth() + 1}-${create_week_last_day.getDate()}`;
 
                 console.log(first_date, last_date);
-                let beauty_order_info = await (await fetch(`http://localhost/test/back/back_beauty_get_order.php?first_date=${first_date}&last_date=${last_date}`)).json();
+
+                // lala fetch
+                let beauty_order_info = await (await fetch(`http://localhost/test/testlaravel/public/api/back_beauty_get_order_oneweek/${first_date}/${last_date}`)).json();
+
+                // 純php
+                // let beauty_order_info = await (await fetch(`http://localhost/test/back/back_beauty_get_order.php?first_date=${first_date}&last_date=${last_date}`)).json();
                 // console.log(beauty_order_info);
+
                 draw(beauty_order_info, order_creatweek);
             }
 

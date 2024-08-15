@@ -65,7 +65,7 @@
     <main class="mb-5">
         <!-- banner -->
         <div class="banner d-flex justify-content-center align-items-center">
-            <h2 class="fw-bold">台中店</h2>
+            <h2 class="fw-bold" id="bannerinner">台中店</h2>
         </div>
 
         <!-- 美容預約按鍵 -->
@@ -214,6 +214,7 @@
             // 分店選擇 存 選分店到 branch_select
             document.getElementById('branch_list').addEventListener('click', function (e) {
                 $(e.target).parent().prev().html(e.target.innerHTML);
+                bannerinner.innerHTML = e.target.innerHTML;
                 sessionStorage.setItem("branch_select", e.target.innerHTML);
                 console.log("sessionStorage", sessionStorage.getItem("branch_select"));
             });
@@ -365,9 +366,13 @@
                 //     .then(data => {
                 //         console.log(data);
                 //     })
-                let data = await (await fetch('http://localhost/test/back/front_beauty_plan.php')).json();
+                // 純PHP
+                // let data = await (await fetch('http://localhost/test/back/front_beauty_plan.php')).json();
                 // 拿到的美容方案資訊
                 // console.log('拿到的美容方案資訊', data);
+
+                // lala fetch
+                let data = await (await fetch('http://localhost/test/testlaravel/public/api/front_beauty_plan_info')).json();
 
                 // 顯示
                 show_beauty_plan(data);
@@ -384,14 +389,40 @@
                 //     .then(data => {
                 //         console.log(data);
                 //     })
-                let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
+                // 純PHP
+                // let pet_info = await (await fetch(`http://localhost/test/back/front_get_pet_info.php?uid=${uid}`)).json();
+
+                // lala fetch
+                let pet_info = await (await fetch(`http://localhost/test/testlaravel/public/api/front_beauty_pet_info/${uid}`)).json();
+
                 console.log('拿到的寵物資訊', pet_info);
                 show_pet_info(pet_info);
             }
 
-            // 取得美容價格時間
+            // 取得美容價格時間  純PHP
+            // function get_beauty_price({ pet_species, pet_weight, pet_fur }) {
+            //     fetch('http://localhost/test/back/front_get_beauty_price_time.php', {
+            //         method: 'POST',
+            //         // 解構物件 key value 一樣 簡寫
+            //         body: JSON.stringify({
+            //             pet_species,
+            //             pet_weight,
+            //             pet_fur
+            //         }),
+            //         headers: {
+            //             'Content-Type': 'application/json; charset=utf-8'
+            //         }
+            //     }).then(res => res.json())
+            //         .then(result => {
+            //             console.log('GET時間價格', result);
+            //             sessionStorage.setItem('beauty_plan_price_time', JSON.stringify(result));
+            //             get_beauty_plan();
+            //         })
+            // }
+
+            // lala fetch 
             function get_beauty_price({ pet_species, pet_weight, pet_fur }) {
-                fetch('http://localhost/test/back/front_get_beauty_price_time.php', {
+                fetch('http://localhost/test/testlaravel/public/api/front_beauty_plan_price_time', {
                     method: 'POST',
                     // 解構物件 key value 一樣 簡寫
                     body: JSON.stringify({
@@ -409,7 +440,6 @@
                         get_beauty_plan();
                     })
             }
-
 
             get_pet_info();
 

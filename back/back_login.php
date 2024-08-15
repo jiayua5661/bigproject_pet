@@ -12,7 +12,7 @@ use \Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 $host = 'localhost';
-$dbname = 'petdb';
+$dbname = 'happypet_DB';
 $user = 'root';
 $password = '';
 

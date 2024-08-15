@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 $host = 'localhost';
-$dbname = 'petdb';
+$dbname = 'happypet_DB';
 $user = 'root';
 $password = '';
 
@@ -31,8 +31,6 @@ if($pet_species == '狗') {
 } else {
     $weight_range = '0000';
 }
-
-
 
 try {
 
