@@ -18,10 +18,10 @@ $password = '';
 
 $key = "your_secret_key"; // 共享密鑰
 $issuedAt = time();
-// $expirationTime = $issuedAt + 600;  // JWT 有效期 (例如 10 分鐘)
-// $refreshExpirationTime = $issuedAt + 604800;  // 刷新令牌有效期 (例如 7 天)
-$expirationTime = $issuedAt + 10;  // JWT 有效期 (例如 10 秒)
+$expirationTime = $issuedAt + 600;  // JWT 有效期 (例如 10 分鐘)
 $refreshExpirationTime = $issuedAt + 604800;  // 刷新令牌有效期 (例如 7 天)
+// $expirationTime = $issuedAt + 10;  // JWT 有效期 (例如 10 秒)
+// $refreshExpirationTime = $issuedAt + 604800;  // 刷新令牌有效期 (例如 7 天)
 
 header('Content-Type: application/json');
 
