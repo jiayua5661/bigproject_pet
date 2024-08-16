@@ -28,8 +28,8 @@
     <!-- Header -->
     <!-- Header -->
     <header id="navbar" class="sticky-top ">
-        <div class="member nav_icon ">
-            <a href="">登出</a>
+        <div class="member nav_icon">
+            <a href="#" id="logout_btn">登出</a>
         </div>
         <div class="row align-items-center container-xl">
             <div class="text-center col-xxl-3 col-xl-3 col-lg-12 col-md-12 col-ms-12 col-12">
@@ -43,33 +43,34 @@
                         <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="header_beauty"
                             data-bs-toggle="dropdown" aria-expanded="false">美容預約</a>
                         <ul class="dropdown-menu nav_drop" aria-labelledby="header_beauty">
-                            <li><a href="" class="dropdown-item">美容預約表</a></li>
+                            <li><a href="#" class="dropdown-item" id="beauty1">美容預約表</a></li>
                         </ul>
                     </li>
                     <li class="col-3 mt-3 mb-3 dropdown">
                         <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="header_hotel"
                             data-bs-toggle="dropdown" aria-expanded="false">寵物住宿</a>
                         <ul class="dropdown-menu nav_drop" aria-labelledby="header_hotel">
-                            <li><a href="" class="dropdown-item">旅館訂單</a></li>
-                            <li><a href="" class="dropdown-item">當日住宿</a></li>
+                            <li><a href="#" class="dropdown-item" id="hotel1">旅館訂單</a></li>
+                            <li><a href="#" class="dropdown-item" id="hotel2">當日住宿</a></li>
                         </ul>
                     </li>
                     <li class="col-3 mt-3 mb-3 dropdown">
                         <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="header_product"
                             data-bs-toggle="dropdown" aria-expanded="false">產品專區</a>
                         <ul class="dropdown-menu nav_drop" aria-labelledby="header_product">
-                            <li><a href="" class="dropdown-item">產品主要內容</a></li>
-                            <li><a href="" class="dropdown-item">產品詳細資訊</a></li>
-                            <li><a href="" class="dropdown-item">產品入庫</a></li>
-                            <li><a href="" class="dropdown-item">上架中產品</a></li>
-                            <li><a href="" class="dropdown-item">未上架產品</a></li>
+                            <li><a href="#" class="dropdown-item" id="product1">產品主要內容</a></li>
+                            <li><a href="#" class="dropdown-item" id="product2">產品詳細資訊</a></li>
+                            <li><a href="#" class="dropdown-item" id="product3">產品入庫</a></li>
+                            <li><a href="#" class="dropdown-item" id="product4">上架中產品</a></li>
+                            <li><a href="#" class="dropdown-item" id="product5">未上架產品</a></li>
                         </ul>
                     </li>
                     <li class="col-3 mt-3 mb-3 dropdown">
                         <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button"
                             id="header_product_order" data-bs-toggle="dropdown" aria-expanded="false">產品訂單</a>
                         <ul class="dropdown-menu nav_drop" aria-labelledby="header_product_order">
-                            <li><a href="" class="dropdown-item">產品訂單</a></li>
+                            <li><a href="#" class="dropdown-item" id="product_order1">產品訂單資訊</a></li>
+                            <li><a href="#" class="dropdown-item" id="product_order2">會員訂單紀錄</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -86,7 +87,7 @@
         <div class="px-5 mt-4">
 
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="ps-4 mb-0">美容後台畫面</h5>
+                <h2 class="ps-5 mb-0 color_primary_self">美容預約表</h2>
                 <div id="select_week">
                     <button class="me-4 px-4 py-2" id="last_week">上一週</button>
                     <button class="me-5 px-4 py-2" id="next_week">下一週</button>
@@ -449,12 +450,12 @@
             </div>
 
             <!-- 彈出視窗 -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="exampleModalshowpet" tabindex="-1" aria-labelledby="exampleModalshowpetLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">明細</h5>
+                            <h5 class="modal-title" id="exampleModalshowpetLabel">明細</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
@@ -492,6 +493,22 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- 權限不足 -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div> -->
+                    <div class="modal-body d-flex justify-content-center fs-4">
+                        權限不足
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 起始點 top:107 left:190 一格 高度40 寬度:5.555% -->
@@ -589,7 +606,7 @@
                     }
                     if (order_in) {
                         canvas_div.innerHTML += `
-                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModal" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" data-pet_head="${element.pet_headphoto}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.473%; background-color: white;">${element.pet_name}</div>
+                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModalshowpet" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" data-pet_head="${element.pet_headphoto}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.473%; background-color: white;">${element.pet_name}</div>
                         `;
                         break;
                     }
@@ -621,6 +638,40 @@
     <script>
         window.onload = () => {
 
+            // 複製 這裡
+            if (localStorage.getItem('ahref')) {
+                let ahref = [['beauty1'], ['hotel1', 'hotel2'], ['product1', 'product2', 'product3', 'product4', 'product5'], ['product_order1', 'product_order2']];
+                localStorage.getItem('ahref').split('**').map(element => element.split(',')).forEach((element, index) => {
+                    element.forEach((ele, ind) => {
+                        if (ele != "#") {
+                            document.getElementById(`${ahref[index][ind]}`).href = ele;
+                        }
+                    })
+                });
+            }
+
+            logout_btn.onclick = () => {
+                console.log('登出');
+
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('uid');
+                localStorage.removeItem('ahref');
+
+                window.location.href = "../00_index/index_back.html";
+            }
+
+            $('.nav>li>ul>li').on('click', 'a', function () {
+                if ($(this).attr("href") == '#') {
+                    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"), {});
+                    myModal.show();
+                    console.log('權限不足');
+                }
+                // console.log($(this).attr("href"));
+            })
+
+            // 複製 到這裡
+
             // 彈出視窗
             $('#canvas_div').on('click', 'div', function () {
                 let today_date = new Date();
@@ -639,9 +690,9 @@
 
                     // console.log(data);
                     // console.log( parseInt(data[0].date.split('-')[0]+data[0].date.split('-')[1]+data[0].date.split('-')[2]));
-                    
+
                     data.sort(function (a, b) {
-                        return parseInt(b.date.split('-')[0]+b.date.split('-')[1]+b.date.split('-')[2]) - parseInt(a.date.split('-')[0]+a.date.split('-')[1]+a.date.split('-')[2]); 
+                        return parseInt(b.date.split('-')[0] + b.date.split('-')[1] + b.date.split('-')[2]) - parseInt(a.date.split('-')[0] + a.date.split('-')[1] + a.date.split('-')[2]);
                     })
 
                     data.forEach(element => {

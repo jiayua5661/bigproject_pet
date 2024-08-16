@@ -139,12 +139,25 @@
                 </div>
             </div>
         </div>
-        <button id="jwtbtn">登入之後驗證JWT拿資料</button>
+        <!-- <button id="jwtbtn">登入之後驗證JWT拿資料</button> -->
     </main>
 
     <script>
         window.onload = () => {
 
+            // 登入後拿到的連結  
+            // console.log("連結", localStorage.getItem('ahref').split('**').map(element => element.split(',')));
+            if (localStorage.getItem('ahref')) {
+                localStorage.getItem('ahref').split('**').map(element => element.split(',')).forEach((element, index) => {
+                    element.some(function (item) {
+                        if (item != "#") {
+                            console.log('登入之後', item);
+                            window.location.href = item;
+                            return true;
+                        }
+                    })
+                });
+            }
 
             $('.nav>li>ul>li').on('click', 'a', function () {
                 if ($(this).attr("href") == '#') {
@@ -247,6 +260,8 @@
                 localStorage.removeItem('uid');
                 localStorage.removeItem('ahref');
 
+                window.location.href = "../00_index/index_back.html";
+
             }
 
             loginBtn.onclick = (event) => {
@@ -275,7 +290,7 @@
                             let data1 = data.ahref.split('**');
                             let data2 = data1.map(element => element.split(','));
                             console.log(data2);
-                            
+
                             data2.forEach((element, index) => {
                                 element.forEach((ele, ind) => {
                                     document.getElementById(`${ahref[index][ind]}`).href = ele;
@@ -288,6 +303,25 @@
                             console.log(data.refreshToken);
                             console.log(data.permission);
                             console.log(data.id);
+
+                            // data2.forEach((element, index) => {
+                            //     element.forEach((ele, ind) => {
+                            //         if (ele != "#") {
+                            //             ahrefcount = 1;
+                            //             console.log('登入之後', ele);
+                            //             // window.location.href = ele;
+                            //             return true;
+                            //         }
+                            //     })
+                            // });
+
+                            data2.some(function (item) {
+                                if (item != "#") {
+                                    console.log('登入之後', item);
+                                    window.location.href = item;
+                                    return true;
+                                }
+                            })
                             // sessionStorage.setItem('permission', text);
                             // set_staff_state();
 
@@ -298,78 +332,78 @@
 
             }
 
-            jwtbtn.onclick = () => {
+            // jwtbtn.onclick = () => {
 
-                let token = localStorage.getItem('token');
-                let refreshToken = localStorage.getItem('refreshToken');
-                let uid = localStorage.getItem('uid');
+            //     let token = localStorage.getItem('token');
+            //     let refreshToken = localStorage.getItem('refreshToken');
+            //     let uid = localStorage.getItem('uid');
 
-                if (!token || !refreshToken) {
-                    console.log('已登出');
-                    return;
-                }
-                function fetchData() {
-                    fetch(`http://localhost/test/back/back_login_get_info.php?uid=${uid}`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    })
-                        .then(response => {
-                            console.log('status', response.status);
-                            if (response.status === 401) { // 如果憑證過期 刷新
-                                console.log('token過期');
-                                return fetch('http://localhost/test/back/back_login_refresh_token.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ refreshToken: refreshToken })
-                                })
-                                    .then(response => {
-                                        console.log('刷新一半');
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        console.log('刷新輸出', data);
-                                        if (data.token) {
-                                            token = data.token;
-                                            localStorage.setItem('token', token);
-                                            console.log('token刷新');
-                                            return fetchData();
-                                        } else {
-                                            throw new Error('Refresh token failed');
-                                        }
-                                    });
-                            } else {
-                                return response.json();
-                            }
-                        })
-                        .then(data => {
-                            if (data.message === 'Unauthorized') {
-                                console.log('拿資料失敗');
-                            } else {
-                                console.log('拿資料', data);
+            //     if (!token || !refreshToken) {
+            //         console.log('已登出');
+            //         return;
+            //     }
+            //     function fetchData() {
+            //         fetch(`http://localhost/test/back/back_login_get_info.php?uid=${uid}`, {
+            //             method: 'GET',
+            //             headers: {
+            //                 'Authorization': 'Bearer ' + token
+            //             }
+            //         })
+            //             .then(response => {
+            //                 console.log('status', response.status);
+            //                 if (response.status === 401) { // 如果憑證過期 刷新
+            //                     console.log('token過期');
+            //                     return fetch('http://localhost/test/back/back_login_refresh_token.php', {
+            //                         method: 'POST',
+            //                         headers: {
+            //                             'Content-Type': 'application/json'
+            //                         },
+            //                         body: JSON.stringify({ refreshToken: refreshToken })
+            //                     })
+            //                         .then(response => {
+            //                             console.log('刷新一半');
+            //                             return response.json();
+            //                         })
+            //                         .then(data => {
+            //                             console.log('刷新輸出', data);
+            //                             if (data.token) {
+            //                                 token = data.token;
+            //                                 localStorage.setItem('token', token);
+            //                                 console.log('token刷新');
+            //                                 return fetchData();
+            //                             } else {
+            //                                 throw new Error('Refresh token failed');
+            //                             }
+            //                         });
+            //                 } else {
+            //                     return response.json();
+            //                 }
+            //             })
+            //             .then(data => {
+            //                 if (data.message === 'Unauthorized') {
+            //                     console.log('拿資料失敗');
+            //                 } else {
+            //                     console.log('拿資料', data);
 
-                                // let data1 = data.ahref.split('**');
-                                // let data2 = data1.map(element => element.split(','));
+            //                     // let data1 = data.ahref.split('**');
+            //                     // let data2 = data1.map(element => element.split(','));
 
-                                // data2.forEach((element, index) => {
-                                //     element.forEach((ele, ind) => {
-                                //         document.getElementById(`${ahref[index][ind]}`).href = ele;
-                                //     })
-                                // });
+            //                     // data2.forEach((element, index) => {
+            //                     //     element.forEach((ele, ind) => {
+            //                     //         document.getElementById(`${ahref[index][ind]}`).href = ele;
+            //                     //     })
+            //                     // });
 
 
 
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                }
-                fetchData();
-            }
+            //                 }
+            //             })
+            //             .catch(error => {
+            //                 console.error('Error:', error);
+            //             });
+            //     }
+            //     fetchData();
+            // }
         }
 
     </script>
