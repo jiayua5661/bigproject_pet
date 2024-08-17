@@ -408,6 +408,8 @@
 
         // 選擇日期
         function selectdate(seldate) {
+            $('#appointment_confirmation').css({ "visibility": "hidden" });
+            show_selecttime.innerHTML = "";
             const dayofweek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             let datearr = seldate.dataset.date.split('-');
             // console.log(seldate.dataset.date, datearr);
@@ -591,6 +593,8 @@
 
         // 選擇寵物
         function select_pet(this_ele) {
+            $('#appointment_confirmation').css({ "visibility": "hidden" });
+            show_selecttime.innerHTML = "";
 
             // console.log('選寵物', this_ele);
             select_pet_clear();
