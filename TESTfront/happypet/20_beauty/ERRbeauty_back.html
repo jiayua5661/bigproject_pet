@@ -20,7 +20,11 @@
     <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap" rel="stylesheet">
 
 </head>
-
+<style>
+    .aaa {
+        visibility: hidden;
+    }
+</style>
 <body>
     <!-- Header -->
     <!-- Header -->
@@ -89,8 +93,8 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="ps-5 mb-0 color_primary_self">美容預約表</h2>
                 <div id="select_week">
-                    <button class="me-4 px-4 py-2" id="last_week">上一週</button>
-                    <button class="me-5 px-4 py-2" id="next_week">下一週</button>
+                    <button class="me-4 px-4 py-2 bgc_primary_self text-white rounded border-white" id="last_week">上一週</button>
+                    <button class="me-5 px-4 py-2 bgc_primary_self text-white rounded border-white" id="next_week">下一週</button>
                 </div>
             </div>
 
@@ -460,9 +464,9 @@
                         </div>
                         <div class="modal-body row">
                             <div class="d-flex container col-12">
-                                <div class="me-4 back_petimg_div">
+                                <div class="me-4 back_petimg_div d-flex align-items-center">
                                     <img id="show_window_pet_headphoto" src="../img/20_beauty/petheadshot_none.png"
-                                        alt="" class="img-fluid rounded-circle">
+                                        alt="" class="img-fluid">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
                                     <p>名字 : <span id="show_window_pet_name">小白</span></p>
@@ -609,7 +613,7 @@
                         let color_array = ['wheat', 'thistle', 'lightblue', 'lightcyan', 'lightgoldenrodyellow'];
                         
                         canvas_div.innerHTML += `
-                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModalshowpet" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" data-pet_head="${element.pet_headphoto}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.463%; background-color: ${color_array[parseInt(Math.random() * 5)]};">${element.pet_name}</div>
+                        <div id="order_box_id${element.boid}" data-bs-toggle="modal" data-bs-target="#exampleModalshowpet" data-pid="${element.pid}" data-pet_name="${element.pet_name}" data-pet_birthday="${element.pet_birthday}" data-user_name="${element.name}" data-cellphone="${element.cellphone}" data-plan_title="${element.plan_title}" data-others="${element.others}" data-pet_head="${element.pet_headphoto}" class="order_box d-flex align-items-center justify-content-center" style="top: ${start_time * 40}px;  left: ${(iDays * 3 + c) * 5.55}%;  height: ${half_hour * 40 - 1}px;  width: 5.463%; background-color: #fff;">${element.pet_name}</div>
                         `;
                         break;
                     }
@@ -648,6 +652,10 @@
                     element.forEach((ele, ind) => {
                         if (ele != "#") {
                             document.getElementById(`${ahref[index][ind]}`).href = ele;
+                            
+                            console.log('連結', $(`#${ahref[index][ind]}`));
+                            
+                            $(`#${ahref[index][ind]}`).css({'visibility':'hidden'});
                         }
                     })
                 });

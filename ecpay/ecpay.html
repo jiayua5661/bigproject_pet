@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="sssss">付款</button>
+
+
+
+    <script>
+
+        sssss.onclick = () => {
+            
+                fetch('http://localhost/test/vendor/ecpay/sdk/example/Payment/Aio/CreateOrder.php', {
+                    method: 'POST',
+                    // 解構物件 key value 一樣 簡寫
+                    body: JSON.stringify({
+
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    }
+                }).then(res => res.text())
+                    .then(result => {
+                        console.log(result);
+                        
+                    })
+            
+        }
+
+
+        
+    </script>
+</body>
+</html>
